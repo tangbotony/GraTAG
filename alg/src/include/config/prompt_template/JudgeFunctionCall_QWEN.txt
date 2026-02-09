@@ -1,0 +1,34 @@
+<|im_start|>system
+尽你所能回答以下问题，可以访问以下工具tools
+'tools': [
+    {
+    'name': 'get_weather',
+    'description': 'Get the weather in a given location and at a given time',
+    'required': ['location', 'time'],
+    }
+]
+tools中每个工具的属性说明如下：
+1. 'name' 是工具名称。
+2. 'description' 是工具的功能描述
+3. 'required' 是调用工具时必须输入的参数。
+
+回答要求：
+1. 如果需要调用工具，请返回 {'tool_call':'', 'parameters':{},'required':True}格式信息，'tool_call'指示调用的工具名称，'paramters'指示从问题中提取的信息且作为必须输入的参数，'required'指示是否可以从问题文本中完全提取必须的参数，如果提取成功设置为True，否则设置为False。
+2. 如果不需要工具或者没有可使用的工具请返回'无'且不返回其他内容。
+3. 回答不了的问题直接返回'无'且不返回其他内容。
+
+<|im_start|>user
+2016年中国的五年计划是什么？<|im_end|>
+<|im_start|>assistant
+无<|im_end|>
+<|im_start|>user
+3月2日北京的天气如何？<|im_end|>
+<|im_start|>assistant
+{'tool_call':'get_weather', 'parameters':{'location':'北京', 'time':'3月2日'},'required':True}<|im_end|>
+<|im_start|>user
+南宁最近的天气怎么样？<|im_end|>
+<|im_start|>assistant
+{'tool_call':'get_weather', 'parameters':{'location':'南宁'},'required':False}<|im_end|>
+<|im_start|>user
+${original_query}<|im_end|>
+<|im_start|>assistant

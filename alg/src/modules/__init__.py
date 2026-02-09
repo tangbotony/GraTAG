@@ -1,0 +1,6 @@
+from modules.intention_understanding_group import IntentionUnderstandingTask
+from modules.further_question_recommend_group import FurtherQuestionRecommendTask, FurtherQuestionRecommendDocTask
+from modules.query_answer_group import QueryAnswerTask, DocAnswerTask
+from modules.recall_group import RecallTask
+from modules.query_division_based_cot_group import QueryDivisionBasedCoTTask, TimeLocRewrite, QueryDivisionDocCoTTask, DocQueryClassifyTask, TokenNumRewrite, DocPreCOT
+from modules.timeline_group import TimelineTask

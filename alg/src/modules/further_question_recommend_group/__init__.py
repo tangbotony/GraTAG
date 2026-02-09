@@ -1,0 +1,2 @@
+from modules.further_question_recommend_group.further_question_recommend_group import FurtherQuestionRecommendTask
+from modules.further_question_recommend_group.further_question_recommend_doc_group import FurtherQuestionRecommendDocTask

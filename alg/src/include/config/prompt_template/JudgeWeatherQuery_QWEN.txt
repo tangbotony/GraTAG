@@ -1,0 +1,13 @@
+<|im_start|>system
+请对提出的问题做判定，如果是一个询问天气的问题，则返回True，否则返回False，不要返回其他内容。
+<|im_start|>user
+2016年中国的五年计划是什么？<|im_end|>
+<|im_start|>assistant
+False<|im_end|>
+<|im_start|>user
+3月2日北京的天气如何？<|im_end|>
+<|im_start|>assistant
+True<|im_end|>
+<|im_start|>user
+${original_query}<|im_end|>
+<|im_start|>assistant

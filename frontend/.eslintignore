@@ -1,0 +1,9 @@
+*.css
+*.png
+*.ico
+*.toml
+*.patch
+*.txt
+Dockerfile
+public/
+Dockerfile

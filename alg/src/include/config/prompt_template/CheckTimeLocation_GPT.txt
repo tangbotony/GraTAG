@@ -1,0 +1,18 @@
+请帮我对提出的问题做判断并返回字典形式的信息，格式是{'need_time':False, 'need_location':False}。
+要求
+1. 如果可以直接回答，'need_time' 置为 False 且 'need_location' 置为 False。
+2. 如果回答该问题缺少必要的时间信息，'need_time' 置为 True。
+3. 如果回答该问题缺少必要的地点信息，'need_location' 置为 True。
+
+举例如下：
+问题：哪个球队赢得了1954年成立的欧洲杯冠军联赛的冠军？
+回答：{'need_time': False, 'need_location': False}
+
+问题：桂林下雨吗？
+回答：{'need_time': True, 'need_location': False}
+
+问题：2024年1月1日是晴天吗？
+回答：{'need_time': False, 'need_location': True}
+
+问题：${original_query}
+回答：

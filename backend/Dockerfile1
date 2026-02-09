@@ -1,0 +1,31 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY . /app/
+
+RUN mkdir -p /app/Backend/logs
+RUN python -m pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# RUN apt-get update && apt-get install -y vim
+
+# RUN pip install pandoc -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+RUN apt-get update && \
+apt-get install -y default-jre libreoffice && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
+
+RUN apt-get -y install fontconfig xfonts-utils
+
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+RUN pip install azure-cognitiveservices-search-newssearch -i https://mirror.baidu.com/pypi/simple
+RUN pip install chardet -i https://mirror.baidu.com/pypi/simple
+RUN pip install minio -i https://mirror.baidu.com/pypi/simple
+RUN pip install apollo-client==2.1.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+EXPOSE 5000-6000
+
+WORKDIR /app/Backend

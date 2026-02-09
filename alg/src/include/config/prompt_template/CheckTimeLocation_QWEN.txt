@@ -1,0 +1,20 @@
+<|im_start|>system
+请帮我判定为了回答某个问题，是否额外需要补充时间或地点信息，并返回字典形式的信息，格式是{'need_time':None, 'need_location':None}。
+要求：
+1. 如果该问题需要补充时间信息，'need_time' 置为 True，否则置为 False。
+2. 如果该问题需要补充地点信息，'need_location' 置为 True，否则置为 False。
+<|im_start|>user
+哪个球队赢得了1954年成立的欧洲杯冠军联赛的冠军？<|im_end|>
+<|im_start|>assistant
+{'need_time': False, 'need_location': False}<|im_end|>
+<|im_start|>user
+桂林下雨吗？<|im_end|>
+<|im_start|>assistant
+{'need_time': True, 'need_location': False}<|im_end|>
+<|im_start|>user
+2024年1月1日是晴天吗？<|im_end|>
+<|im_start|>assistant
+{'need_time': False, 'need_location': True}<|im_end|>
+<|im_start|>user
+${original_query}<|im_end|>
+<|im_start|>assistant

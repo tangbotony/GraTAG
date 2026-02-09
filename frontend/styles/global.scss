@@ -1,0 +1,266 @@
+@import './vars.scss';
+@import './font.scss';
+@import './element.scss';
+@import './driver.scss';
+
+body {
+    font-family: "Helvetica Neue","Helvetica","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Noto Sans CJK","Source Han Sans","WenQuanYi Micro Hei","Microsoft YaHei",sans-serif;
+}
+
+html,
+body,
+#__nuxt {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+}
+
+#__nuxt {
+    outline: none;
+    border: 0;
+}
+
+
+
+
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+*, :after, :before {
+    box-sizing: border-box;
+    border: 0 solid #e5e7eb;
+}
+
+
+
+
+.base-btn:not([disabled]) {
+    border-radius: 20px !important;
+    border: 1px solid #4044ED !important;
+    background: #4044ED !important;
+    color: white !important;
+    padding: 4px 15px;
+    /* drop-shadow/button-primary */
+    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+}
+
+.base-btn[disabled] {
+    padding: 4px 15px;
+    border-radius: 20px;
+    border: 1px solid #CCC;
+    background: #C3C3C3;
+    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+}
+
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 2px;
+    height: 2px;
+}
+
+/* background of the scrollbar except button or resizer */
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* scrollbar itself */
+::-webkit-scrollbar-thumb {
+    background-color: rgb(242, 242, 242);
+    border-radius: 2px;
+}
+
+/* set button(top and bottom of the scrollbar) */
+::-webkit-scrollbar-button {
+    display:none;
+}
+
+.text-hidden-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-hidden-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-hidden-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.is-error {
+    .input-box {
+        border: 1px solid #f56c6c !important;
+    }
+}
+
+
+input, textarea {
+    caret-color: #4044ED;
+}
+
+.format-painter-cursor {
+    cursor: url("~/assets/images/paint-brush-line.cur"), auto;
+}
+
+.quote-window-highlight {
+    background: #fff7df;
+
+    &.current {
+        background: #ffff00;
+    }
+}
+
+.quote-window-highlight2 {
+    background: #ffff00;
+}
+
+button {
+    background-color: transparent;
+}
+
+
+.html-container {
+    font-weight: 400;
+    color: #24292F;
+    font-size: 16px;
+    line-height: 28px;
+
+    h1 {
+        font-size: 24px;
+        line-height: 34px;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    h2 {
+        font-size: 22px;
+        line-height: 31px;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    h3 {
+        font-size: 20px;
+        line-height: 28px;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    h4 {
+        font-size: 18px;
+        line-height: 25px;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    h5 {
+        font-size: 16px;
+        line-height: 28px;
+        margin-top: 12px;
+        margin-bottom: 4px;
+        font-weight: 500;
+    }
+
+    h6 {
+        font-size: 16px;
+        line-height: 28px;
+        font-weight: 400;
+    }
+    
+    ol, ul {
+        list-style: initial;
+        padding-left: 2.3em;
+        margin: .6em 0;
+    }
+
+    ol > li {
+        list-style: decimal;
+    }
+
+    ol li, ul li {
+        line-height: 1.6;
+        margin: .5em 0;
+    }
+
+
+    strong {
+        font-weight: 500;
+    }
+
+    li {
+        font-size: 16px;
+    }
+
+    p {
+        
+        font-size: 16px;
+    }
+
+    img {
+        width: 528px;
+        height: auto;
+        border-radius: 8px;
+        margin: 20px auto;
+        display: block;
+        cursor: pointer;
+    }
+
+    p {
+        white-space: pre-wrap;
+    }
+  }
+
+  .required:after {
+    content: "*";
+    color: #F00;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    vertical-align: middle;
+}
+
+*::-webkit-scrollbar {
+    width: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.req-message {
+    z-index: 99999 !important;
+}

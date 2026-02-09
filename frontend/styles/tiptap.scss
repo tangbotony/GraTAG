@@ -1,0 +1,149 @@
+@import './tiptap_reset.scss';
+@import './tiptap_vars.scss';
+
+
+.ProseMirror {
+    @include reset;
+  
+    &:focus {
+      outline: none;
+    }
+
+    p.is-editor-empty:first-child::before {
+        color: #adb5bd;
+        content: attr(data-placeholder);
+        float: left;
+        height: 0;
+        pointer-events: none;
+    }
+
+  h1 {
+    color: var(--theme-color-editor-title);
+    font-size: var(--h1-font-size, 27.5px);
+    padding: var(--h1-padding, 6.5px 0);
+    line-height: var(--h1-line-height, 1.3);
+  }
+
+  h2 {
+    color: var(--theme-color-editor-title);
+    font-size: var(--h2-font-size, 22.5px);
+    padding: var(--h2-padding, 6.5px 0);
+    line-height: var(--h2-line-height, 1.4);
+  }
+
+  h3 {
+    color: var(--theme-color-editor-title);
+    font-size: var(--h3-font-size, 17.5px);
+    padding: var(--h3-padding, 6.5px 0);
+    line-height: var(--h3-line-height, 1.6);
+  }
+
+  p {
+    font-size: var(--editor-default-font-size, 15px);
+    line-height: var(--editor-default-line-height, 1.8);
+    color: var(--theme-color-editor-normal);
+  }
+
+  ol, ul, blockquote {
+    line-height: var(--editor-default-line-height, 1.8);
+    font-size: var(--editor-default-font-size, 15px);
+  }
+
+  ol>li {
+    margin-left: 30px;
+    color: var(--theme-color-editor-normal);
+    list-style: decimal;
+  }
+
+  ul>li {
+    margin-left: 30px;
+    color: var(--theme-color-editor-normal);
+    list-style: disc;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--theme-border-editor-blockquote);
+    margin-left: 8px;
+    padding-left: 8px;
+    color: var(--theme-color-editor-normal);
+  }
+
+  a {
+    cursor: pointer;
+    color: #4044ED;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.225px;
+    text-decoration: underline;
+  }
+
+  img {
+    max-width: 100%;
+    display: inline-block;
+    height: auto;
+    object-fit: contain;
+    box-sizing: border-box;
+    &.ProseMirror-selectednode {
+      border: 2px solid var(--c-text-normal);
+    }
+  }
+
+  ::selection {
+    // background-color: #E5E6FF;
+  }
+
+  .has-selection {
+    box-shadow: 0 0.3em 0 #E5E6FF, 0 -0.3em 0 #E5E6FF;
+    background-color: #E5E6FF;
+    box-decoration-break: clone
+  }
+  span[data-type="quote"] {
+    pointer-events: auto;
+  }
+
+  mark {
+    background-color: #ffe066;
+    padding: 0.125em 0;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+}
+
+::marker {
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  text-indent: 0px !important;
+  text-align: start !important;
+  text-align-last: start !important;
+}
+
+.continue-container {
+  span[data-type="quote"] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+}
+
+
+span[data-type="quote"] {
+  color: var(--c-text-normal);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 10px;
+
+  border-radius: 2px;
+  background-color: #E5E6FF;
+  padding: 0px 2px;
+  vertical-align: super;
+  pointer-events: none;
+
+  margin-right: 1px;
+
+  &.active {
+    color: white;
+    background-color: #4044ED;
+  }
+}
