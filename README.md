@@ -1,37 +1,60 @@
-# GraTAG — Production AI Search via Graph-Based Query Decomposition and Triplet-Aligned Generation with Rich Multimodal Representations
+# GraTAG: Production AI Search via Graph-Based Query Decomposition and Triplet-Aligned Generation with Rich Multimodal Representations
 
 <p align="center">
-  <img src="material/teaser2.png" alt="GraTAG Overview" width="100%">
+  <img src="material/teaser2_v1.png" alt="GraTAG Overview" width="100%">
 </p>
 
-**GraTAG** is a full-stack AI search framework designed to improve **relevance**, **comprehensiveness**, and **presentation** of answers. It combines:
+**GraTAG** is a comprehensive AI search engine framework that addresses key challenges in relevance, comprehensiveness, and presentation through three core innovations:
 
-* **GQD (Graph-Based Query Decomposition)** — decomposes complex/ambiguous queries into structured sub-queries with explicit dependencies for precise, stepwise retrieval. 
+* **Graph-Based Query Decomposition (GQD)** — dynamically breaks down complex or ambiguous queries into structured sub-queries with explicit dependencies, enabling more precise, stepwise retrieval.
 
 <p align="center">
-  <img src="material/GQD.png" alt="Graph-Based Query Decomposition" width="80%">
+  <img src="material/GQD_v1.png" alt="Graph-Based Query Decomposition" width="80%">
 </p>
 
-* **TAG (Triplet-Aligned Generation)** — constructs relation triplets from retrieved documents to model entity relations, factual dependencies, and logical links, improving coherence and coverage. 
+* **Triplet-Aligned Generation (TAG)** — dynamically constructs relation triplets from retrieved documents to explicitly model entity relationships, factual dependencies, and logical connections, enabling the model to generate more coherent and comprehensive answers.
 
 <p align="center">
   <img src="material/TAG.png" alt="Triplet-Aligned Generation" width="80%">
 </p>
 
-* **Rich Multimodal Presentations** — timeline visualization and textual-visual choreography to reduce cognitive load and aid verification. 
+* **Rich Multimodal Presentations** — integrates timeline visualization and textual-visual choreography to reduce cognitive load and enhance information verification.
 
 <p align="center">
   <img src="material/Rich Answer Presentations.png" alt="Rich Multimodal Presentations" width="80%">
 </p>
 
-Extensive evaluations on recent real-world queries report that GraTAG **outperforms eight existing systems** in human expert assessments, excelling in relevance, comprehensiveness, and insightfulness. 
+Evaluated on 1,000 recent real-world queries with over 243,000 expert ratings across 9 criteria, GraTAG **outperforms eight existing systems** in human expert assessments, excelling in relevance, comprehensiveness, and insightfulness. Compared to the strongest baseline, GraTAG improves comprehensiveness by **10.8%**, insightfulness by **7.9%**, and the overall average score by **4.8%**. On the public benchmark BrowseComp, GraTAG outperforms the best baseline by **17.3%**.
+
 <p align="center">
-  <img src="material/results.png" alt="Multi-faceted comparison of different systems. Higher value indicates better performance, 10 is the maximum." width="100%">
+  <img src="material/results_v1.png" alt="Multi-faceted comparison of different systems. Higher value indicates better performance, 10 is the maximum." width="100%">
 </p>
 
 ---
 
-## Repository Layout (as provided)
+## Pipeline Overview
+
+GraTAG is an end-to-end production-ready RAG system comprising seven key stages:
+
+1. **Query Preprocessing** — uses a fine-tuned LLM to filter unsafe content, clarify ambiguous queries, and canonicalize spatiotemporal expressions.
+2. **Graph-Based Query Decomposition (GQD)** — decomposes complex queries into structured sub-queries with explicit dependencies to enable hierarchical reasoning.
+3. **Sub-query Expansion** — generates semantic variations to improve coverage.
+4. **Stepwise Retrieval** — performs multi-source retrieval guided by the GQD structure.
+5. **Deduplication and Reranking** — removes redundancy and suppresses noise from retrieved documents.
+6. **Triplet-Aligned Generation (TAG)** — dynamically constructs relation triplets from evidence chunks to restore logical coherence.
+7. **Rich Multimodal Presentations** — delivers structured outputs with timelines and citations to enhance user experience.
+
+---
+
+## Concepts at a Glance
+
+* **GQD** decomposes complex queries into atomic sub-queries represented as a directed acyclic graph (DAG) that explicitly encodes information flow among sub-queries. In contrast to linear or tree-based approaches, GQD captures parallel and joint dependencies, enabling finer-grained and more flexible reasoning. The GQD model is post-trained via supervised fine-tuning on curated query-GQD pairs, followed by reinforcement learning (GRPO) alignment with RAG task performance.
+* **TAG** extracts triplets from retrieved documents and aligns them with the answer generation process to explicitly bridge missing logic and relations across chunks. By injecting these structural cues, TAG enhances cross-chunk reasoning coherence and mitigates hallucination. TAG employs a cold-start triplet extraction stage followed by answer generation training with REINFORCE-based triplet alignment.
+* **Rich Multimodal Presentation** integrates timeline visualizations and textual-visual choreography to reduce cognitive load and enhance information verification. Timeline visualization extracts, deduplicates, groups, and sorts events from retrieved chunks; textual-visual choreography matches and places relevant images alongside generated paragraphs using a multi-measure similarity scoring and the Hungarian algorithm.
+
+---
+
+## Repository Layout
 
 ```
 .
@@ -40,7 +63,7 @@ Extensive evaluations on recent real-world queries report that GraTAG **outperfo
 │   │   ├── include/
 │   │   ├── model_training/
 │   │   │   ├── GQD/                 # GQD-related training code
-│   │   │   └── TAG/                 # TAG-related training code  (subfiles omitted)
+│   │   │   └── TAG/                 # TAG-related training code
 │   │   ├── modules/
 │   │   ├── pipeline/
 │   │   └── script/
@@ -55,15 +78,7 @@ Extensive evaluations on recent real-world queries report that GraTAG **outperfo
 └── README.md                        # (this file)
 ```
 
-> Notes: `frontend/` stores the web UI; `backend/` stores backend code; `alg/` contains algorithm services and training. The full GraTAG pipeline integrates GQD, TAG, and multimodal presentation components. 
-
----
-## Concepts at a Glance
-* **GQD** represents decomposed sub-queries as a directed structure to capture sequential or parallel dependencies and guide retrieval flow. 
-* **TAG** aligns answer generation with extracted triplets so cross-chunk logic is preserved, boosting coherence and factuality. 
-* **Multimodal Presentation** includes timeline visualizations and paragraph-image choreography to enhance readability and verification. 
-
-A high-level pipeline (query preprocessing → GQD → retrieval → chunk selection/rerank → TAG → multimodal outputs) is illustrated and described in the paper.
+> `frontend/` stores the web UI; `backend/` stores backend code; `alg/` contains algorithm services and training. The full GraTAG pipeline integrates GQD, TAG, and multimodal presentation components.
 
 ---
 
