@@ -59,57 +59,20 @@ GraTAG is an end-to-end production-ready RAG system comprising seven key stages:
 
 ---
 
-## Repository Layout
-
-```
-.
-├── alg/
-│   ├── src/
-│   │   ├── include/
-│   │   ├── model_training/
-│   │   │   ├── GQD/                 # GQD training (SFT + GRPO)
-│   │   │   └── TAG/                 # TAG training (triplet extraction + alignment)
-│   │   ├── modules/
-│   │   ├── pipeline/
-│   │   └── script/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── route.json
-│   ├── run.py
-│   └── README.md
-├── backend/                         # Backend API service
-├── exp/
-│   ├── query/                       # Evaluation query sets
-│   │   ├── SearchBench_1000_en.txt  # SearchBench-1000 (English)
-│   │   ├── SearchBench_1000_en_cn.txt  # SearchBench-1000 (English + Chinese)
-│   │   └── browse_comp_test_set_decrypted.csv  # BrowseComp test set
-│   └── answer_web_crawler/          # Baseline answer collection via browser automation
-│       ├── crawlers/                # Per-product crawlers (Perplexity, Kimi, Ernie, etc.)
-│       ├── evaluate.py              # GPT-based answer extraction and judging
-│       ├── run_all.py               # Orchestration: crawl / evaluate / summary
-│       └── run_crawler.py           # Single-product crawler entry
-├── frontend/                        # Frontend web UI
-├── LICENSE                          # CC BY-NC 4.0 license
-└── README.md                        # (this file)
-```
-
-> `alg/` contains the core algorithm service and model training code. `backend/` provides the RESTful API layer. `frontend/` stores the web UI. `exp/` holds evaluation benchmarks and baseline collection scripts used in the paper experiments.
-
----
-
 ## Code Documentation
 
 ### Architecture Overview
 
-GraTAG adopts a three-tier architecture:
+GraTAG adopts a three-tier architecture. The services communicate via HTTP: **Frontend → Backend API → Algorithm Service**.
 
 | Layer | Directory | Tech Stack | Description |
 |-------|-----------|------------|-------------|
 | **Frontend** | `frontend/` | Nuxt 3 + TypeScript + SCSS | Search interface with streaming answer display, timeline visualization, and document preview |
 | **Backend** | `backend/` | Flask + MongoEngine + JWT | RESTful API layer handling user management, QA session persistence, and algorithm service orchestration |
 | **Algorithm** | `alg/` | Flask + NetworkX + Transformers | Core AI pipeline implementing GQD, TAG, multi-source retrieval, and multimodal presentation |
+| **Experiments** | `exp/` | Playwright + GPT-4o | Evaluation benchmarks (SearchBench-1000, BrowseComp) and baseline answer collection via browser automation |
 
-The services communicate via HTTP: Frontend → Backend API → Algorithm Service. The algorithm service exposes two endpoints (`/execute` and `/stream_execute`) for synchronous and streaming invocations respectively.
+The algorithm service exposes two endpoints (`/execute` and `/stream_execute`) for synchronous and streaming invocations respectively. Key sub-directories under `alg/src/` include `pipeline/` (orchestration), `modules/` (GQD, TAG, retrieval, timeline), `model_training/` (GQD and TAG training scripts), and `include/` (shared config and context management).
 
 ### Infrastructure Dependencies
 
