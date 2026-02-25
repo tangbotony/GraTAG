@@ -70,7 +70,7 @@ GraTAG adopts a three-tier architecture. The services communicate via HTTP: **Fr
 | **Frontend** | `frontend/` | Nuxt 3 + TypeScript + SCSS | Search interface with streaming answer display, timeline visualization, and document preview |
 | **Backend** | `backend/` | Flask + MongoEngine + JWT | RESTful API layer handling user management, QA session persistence, and algorithm service orchestration |
 | **Algorithm** | `alg/` | Flask + NetworkX + Transformers | Core AI pipeline implementing GQD, TAG, multi-source retrieval, and multimodal presentation |
-| **Experiments** | `exp/` | Playwright + GPT-4o | Evaluation benchmarks (SearchBench-1000, BrowseComp) and baseline answer collection via browser automation |
+| **Experiments** | `experiments/` | Playwright + GPT-4o | Evaluation benchmarks (SearchBench-1000, BrowseComp) and baseline answer collection via browser automation |
 
 The algorithm service exposes two endpoints (`/execute` and `/stream_execute`) for synchronous and streaming invocations respectively. Key sub-directories under `alg/src/` include `pipeline/` (orchestration), `modules/` (GQD, TAG, retrieval, timeline), `model_training/` (GQD and TAG training scripts), and `include/` (shared config and context management).
 
