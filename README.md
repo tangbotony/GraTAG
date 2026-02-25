@@ -8,21 +8,21 @@
 
 * **Graph-Based Query Decomposition (GQD)** — dynamically breaks down complex or ambiguous queries into structured sub-queries with explicit dependencies, enabling more precise, stepwise retrieval.
 
-<p align="center">
+<!-- <p align="center">
   <img src="material/GQD_v1.png" alt="Graph-Based Query Decomposition" width="80%">
-</p>
+</p> -->
 
 * **Triplet-Aligned Generation (TAG)** — dynamically constructs relation triplets from retrieved documents to explicitly model entity relationships, factual dependencies, and logical connections, enabling the model to generate more coherent and comprehensive answers.
 
-<p align="center">
+<!-- <p align="center">
   <img src="material/TAG.png" alt="Triplet-Aligned Generation" width="80%">
-</p>
+</p> -->
 
 * **Rich Multimodal Presentations** — integrates timeline visualization and textual-visual choreography to reduce cognitive load and enhance information verification.
 
-<p align="center">
+<!-- <p align="center">
   <img src="material/Rich Answer Presentations.png" alt="Rich Multimodal Presentations" width="80%">
-</p>
+</p> -->
 
 Evaluated on 1,000 recent real-world queries with over 243,000 expert ratings across 9 criteria, GraTAG **outperforms eight existing systems** in human expert assessments, excelling in relevance, comprehensiveness, and insightfulness. Compared to the strongest baseline, GraTAG improves comprehensiveness by **10.8%**, insightfulness by **7.9%**, and the overall average score by **4.8%**. On the public benchmark BrowseComp, GraTAG outperforms the best baseline by **17.3%**.
 
