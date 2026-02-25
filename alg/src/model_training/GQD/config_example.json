@@ -19,14 +19,19 @@
   
   "stage2_grpo": {
     "model_path": "./outputs/stage1/final_model",
+    "gen_model_path": null,
     "dataset_path": "./data/grpo_data.jsonl",
     "output_dir": "./outputs/stage2",
     "lr": 5e-7,
     "batch_size": 1,
     "num_epochs": 2,
     "K_samples": 4,
+    "C_retrievals": 4,
     "beta_kl": 0.01,
     "epsilon_clip": 0.2,
+    "reward_clip": 5.0,
+    "cache_similarity_threshold": 0.95,
+    "evidence_sample_ratio": 0.8,
     "temperature": 0.7,
     "top_p": 0.9,
     "save_steps": 50,
@@ -35,7 +40,7 @@
   
   "retrieval": {
     "bocha_api_key": "sk-********",
-    "openai_api_key": "your_openai_key",
+    "openai_api_key": "",
     "chunk_size": 500,
     "chunk_overlap": 100,
     "similarity_threshold": 0.5,

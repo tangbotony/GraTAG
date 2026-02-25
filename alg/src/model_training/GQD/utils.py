@@ -89,6 +89,22 @@ def compute_retrieval_score(subquery: str, documents: List[str]) -> float:
     return (coverage + diversity) / 2.0
 
 
+def clip_rewards(rewards: torch.Tensor, clip_range: float) -> torch.Tensor:
+    if clip_range <= 0:
+        return rewards
+    return torch.clamp(rewards, -clip_range, clip_range)
+
+
+def compute_query_similarity(q1: str, q2: str) -> float:
+    words1 = set(q1.strip().lower().split())
+    words2 = set(q2.strip().lower().split())
+    if not words1 or not words2:
+        return 0.0
+    intersection = words1 & words2
+    union = words1 | words2
+    return len(intersection) / len(union)
+
+
 def group_relative_normalize(values: torch.Tensor) -> torch.Tensor:
     if len(values) <= 1:
         return torch.zeros_like(values)
