@@ -456,57 +456,6 @@ server {
 
 ---
 
-#### Full Stack Deployment Summary
-
-```
-┌─────────────┐     ┌─────────────────┐     ┌──────────────────┐
-│  Frontend    │────▶│  Backend (Flask) │────▶│  Algorithm (Flask)│
-│  Nuxt 3     │     │  Port: 5000      │     │  Port: 10051      │
-│  Port: 3000 │     │                  │     │                   │
-└─────────────┘     └────────┬─────────┘     └────────┬──────────┘
-                             │                         │
-                    ┌────────┴─────────┐      ┌───────┴───────────┐
-                    │   MongoDB:27017  │      │  Elasticsearch    │
-                    │   Nacos:8848     │      │  Milvus           │
-                    │   OSS/MinIO      │      │  LLM Inference    │
-                    └──────────────────┘      └───────────────────┘
-```
-
-**Startup Order:**
-
-1. Infrastructure services (MongoDB, Elasticsearch, Milvus, LLM)
-2. Algorithm service (`alg/src/run.py`)
-3. Backend service (`backend/Backend/run.py`)
-4. Frontend (`frontend/`)
-
-**Environment Variables:**
-
-| Variable | Service | Description |
-|----------|---------|-------------|
-| `NACOS_HOST_IP` | Backend | Host IP for Nacos service registration |
-| `VITE_API` | Frontend | Backend API gateway URL |
-| `VITE_ENV` | Frontend | Environment identifier (`sit` / `prod`) |
-
-**Test-Time Latency** (Sec. 4.3.4):
-
-GraTAG maximizes parallelism (e.g., executing lateral sub-queries in GQD concurrently) and employs model fine-tuning and quantization to reduce latency.
-
-| System | Latency (s) |
-|--------|-------------|
-| GraTAG | 14.2 |
-| Perplexity AI | 13.9 |
-| Tiangong AI | 4.0 |
-| Ernie Bot | 6.0 |
-| KIMI | 2.8 |
-| Metaso | 10.4 |
-| ChatGLM | 7.9 |
-| Baichuan | 6.1 |
-| Tongyi | 10.4 |
-
-GraTAG latency is measured on a cluster of **16 Muxi MXC500 GPUs** (each ~70% computing power of NVIDIA A800). Baselines are measured via their publicly available interfaces.
-
----
-
 ### Core Module Reference
 
 #### Pipeline Entry — `alg/src/pipeline/functions.py`
@@ -531,7 +480,7 @@ The main pipeline orchestrates the full answer generation flow through two prima
 
 #### Query Preprocessing and Intent Understanding
 
-**Query Preprocessing** (Appendix A.1): A fine-tuned LLM (Qwen-2.5-14B) filters unsafe/harmful queries and clarifies ambiguous ones by prompting the user with options. A second LLM (Qwen-2.5-14B) rewrites the query by resolving relative spatiotemporal terms (e.g., "last week" → precise timestamp ranges), vague locations ("nearby" → specific places), and incomplete entity names.
+**Query Preprocessing:** A fine-tuned LLM (Qwen-2.5-14B) filters unsafe/harmful queries and clarifies ambiguous ones by prompting the user with options. A second LLM (Qwen-2.5-14B) rewrites the query by resolving relative spatiotemporal terms (e.g., "last week" → precise timestamp ranges), vague locations ("nearby" → specific places), and incomplete entity names.
 
 **Class: `IntentionUnderstandingTask`** — `modules/intention_understanding_group/`
 
@@ -589,15 +538,15 @@ Performs graph-guided multi-source retrieval following the DAG execution order.
 | `_get_recall_queries(graph, application)` | Extracts retrieval queries from DAG nodes |
 
 **Retrieval Sources:**
-- Online web search (via IAAR Database API) — multiple search engines queried simultaneously (Appendix A.3)
+- Online web search (via IAAR Database API) — multiple search engines queried simultaneously
 - Elasticsearch full-text search
 - Milvus vector similarity search
 
-**Chunking** (Appendix A.3): Uses `RecursiveCharacterTextSplitter` with chunk size **350** and overlap **25%**, following Azure AI Search findings.
+**Chunking:** Uses `RecursiveCharacterTextSplitter` with chunk size **350** and overlap **25%**, following Azure AI Search findings.
 
-**Chunk Deduplication** (Appendix A.4): Computes pairwise cosine similarity using fine-tuned `bge-large` embeddings. Chunks with similarity > **0.8** are deduplicated via a greedy maximum independent set strategy.
+**Chunk Deduplication:** Computes pairwise cosine similarity using fine-tuned `bge-large` embeddings. Chunks with similarity > **0.8** are deduplicated via a greedy maximum independent set strategy.
 
-**Reranking** (Appendix A.4): Uses fine-tuned `bge-reranker-v2-m3` to sort chunks by relevance to each sub-query. Configuration from `CommonConfig`:
+**Reranking:** Uses fine-tuned `bge-reranker-v2-m3` to sort chunks by relevance to each sub-query. Configuration from `CommonConfig`:
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
@@ -616,16 +565,16 @@ Generates coherent answers by aligning extracted relation triplets with evidence
 | `get_query_answer(query, qa_series_id, ..., streaming=True)` | Streaming answer generation with inline citations and image placement |
 | `get_query_answer_without_streaming(...)` | Synchronous answer generation |
 
-**Textual-Visual Choreography** (Sec. 3.4.2): Images from retrieved documents are filtered and placed alongside generated paragraphs:
+**Textual-Visual Choreography:** Images from retrieved documents are filtered and placed alongside generated paragraphs:
 
-| Step | Method | Threshold / Model | Paper Reference |
-|------|--------|-------------------|-----------------|
-| Image quality filtering | Rule-based | Removes logos, icons, low-res images | Sec. 3.4.2 |
-| Image relevance filtering | bge-reranker-v2-m3 | similarity ≥ **0.3** | Sec. 3.4.2, Tab. 15 |
-| Image-text similarity (1) | clip-vit-huge-patch14 | paragraph ↔ image embedding | Sec. 3.4.2 |
-| Image-text similarity (2) | bge-reranker-v2-m3 | paragraph ↔ document title | Sec. 3.4.2 |
-| Image-text similarity (3) | bge-large | paragraph ↔ document text | Sec. 3.4.2 |
-| Optimal alignment | Hungarian algorithm | weighted average of (1)(2)(3) | Sec. 3.4.2 |
+| Step | Method | Threshold / Model |
+|------|--------|-------------------|
+| Image quality filtering | Rule-based | Removes logos, icons, low-res images |
+| Image relevance filtering | bge-reranker-v2-m3 | similarity ≥ **0.3** |
+| Image-text similarity (1) | clip-vit-huge-patch14 | paragraph ↔ image embedding |
+| Image-text similarity (2) | bge-reranker-v2-m3 | paragraph ↔ document title |
+| Image-text similarity (3) | bge-large | paragraph ↔ document text |
+| Optimal alignment | Hungarian algorithm | weighted average of (1)(2)(3) |
 
 **Streaming Output Types:**
 
@@ -644,7 +593,7 @@ Generates coherent answers by aligning extracted relation triplets with evidence
 
 Generates structured timeline visualizations for temporal queries.
 
-**Pipeline Steps** (Sec. 3.4.1):
+**Pipeline Steps:**
 
 ```
 Query Rewrite → Intent Understanding → CoT Query Splitting
@@ -652,13 +601,13 @@ Query Rewrite → Intent Understanding → CoT Query Splitting
 → Event Grouping → Highlight Extraction → Granularity Determination → Reference Extraction
 ```
 
-**Key Parameters** (from the paper):
+**Key Parameters:**
 
-| Parameter | Value | Paper Reference |
-|-----------|-------|-----------------|
-| Event extraction LLM | Qwen2.5-14B-Instruct | Sec. 3.4.1 |
-| Event embedding model | bge-large | Sec. 3.4.1 |
-| Event deduplication threshold | cosine similarity > 0.9 | Sec. 3.4.1 |
+| Parameter | Value |
+|-----------|-------|
+| Event extraction LLM | Qwen2.5-14B-Instruct |
+| Event embedding model | bge-large |
+| Event deduplication threshold | cosine similarity > 0.9 |
 
 Runs in parallel with answer generation when `pro_flag=True`.
 
@@ -783,16 +732,16 @@ python GQD_Stage_2_GRPO.py \
     --K_samples 8
 ```
 
-| Hyperparameter | Value | Paper Reference |
-|----------------|-------|-----------------|
-| Learning Rate | 5e-7 | — |
-| K (sampled GQDs per query) | 8 | Tab. 14: optimal at K=8 (Avg 9.312) |
-| C (independent retrievals per GQD) | multiple | Eq. 2: variance control via averaging |
-| Beta KL (β) | 0.01 | Eq. 4: KL divergence penalty |
-| Epsilon Clip (ε) | 0.2 | Eq. 4: PPO-style clipping |
-| Temperature | 0.7 | — |
-| Top-p | 0.9 | — |
-| Evidence Cache Similarity | 0.95 | Sec. 3.2.3: BGE-M3 embedding similarity |
+| Hyperparameter | Value |
+|----------------|-------|
+| Learning Rate | 5e-7 |
+| K (sampled GQDs per query) | 8 |
+| C (independent retrievals per GQD) | multiple |
+| Beta KL (β) | 0.01 |
+| Epsilon Clip (ε) | 0.2 |
+| Temperature | 0.7 |
+| Top-p | 0.9 |
+| Evidence Cache Similarity | 0.95 |
 
 **One-click Training:**
 
@@ -802,9 +751,9 @@ bash quick_start.sh
 
 #### TAG Training
 
-TAG employs a two-stage approach following the paper's formulation: (1) triplet extraction cold start via SFT, and (2) answer generation training with REINFORCE-based triplet alignment (Sec. 3.3).
+TAG employs a two-stage approach: (1) triplet extraction cold start via SFT, and (2) answer generation training with REINFORCE-based triplet alignment.
 
-**Stage 1 — Triplet Extraction Cold Start (Sec. 3.3.1):**
+**Stage 1 — Triplet Extraction Cold Start:**
 
 A strong teacher model (GPT-4o) first extracts high-quality relation triplets for each (sub-query, chunks) pair. The triplets encapsulate entity details, inter-entity relations, and implicit factual/logical dependencies. After manual quality verification, the target LLM is fine-tuned via SFT to produce concise triplets, using dedicated extraction tokens `⟨startextraction⟩` and `⟨endextraction⟩`.
 
@@ -814,18 +763,18 @@ python TAG_Stage_1_train_lora_all_lr5e-5.py \
     --model_path <qwen2.5-72b-instruct-path>
 ```
 
-| Hyperparameter | Value | Paper Reference |
-|----------------|-------|-----------------|
-| Base Model | Qwen2.5-72B-Instruct | Fig. 5 |
-| Teacher Model | GPT-4o | Sec. 3.3.1 |
-| Learning Rate | 5e-5 | — |
-| Batch Size | 1 | — |
+| Hyperparameter | Value |
+|----------------|-------|
+| Base Model | Qwen2.5-72B-Instruct |
+| Teacher Model | GPT-4o |
+| Learning Rate | 5e-5 |
+| Batch Size | 1 |
 
-**Stage 2 — Answer Generation Training and Triplet Alignment (Sec. 3.3.2):**
+**Stage 2 — Answer Generation Training and Triplet Alignment:**
 
-The model learns to generate answers with and without triplet augmentation. A three-layer MLP with ReLU computes per-token weights ω (Eq. 6) from concatenated hidden states. The REINFORCE algorithm selects the most beneficial triplet for each sample (Eq. 10–12), with a length-aware bonus encouraging concise triplets. The total loss is:
+The model learns to generate answers with and without triplet augmentation. A three-layer MLP with ReLU computes per-token weights ω from concatenated hidden states. The REINFORCE algorithm selects the most beneficial triplet for each sample, with a length-aware bonus encouraging concise triplets. The total loss is:
 
-`L = L_ans + α · L_REINFORCE` (Eq. 13)
+`L = L_ans + α · L_REINFORCE`
 
 ```bash
 python TAG_Stage_2_train.py \
@@ -836,14 +785,14 @@ python TAG_Stage_2_train.py \
     --original_loss_weight 0.5
 ```
 
-| Hyperparameter | Value | Paper Reference |
-|----------------|-------|-----------------|
-| Learning Rate | 5e-7 | — |
-| α (REINFORCE weight) | 0.5 | Eq. 13: trade-off L_ans vs L_REINFORCE |
-| γ (length-aware bonus) | > 0 | Sec. 3.3.2: shorter triplets preferred |
-| MLP layers | 3 (ReLU) | Eq. 6: weight computation |
-| N Passes | 3 | implementation-specific |
-| N Ahead (lookahead tokens) | 200 | implementation-specific |
+| Hyperparameter | Value |
+|----------------|-------|
+| Learning Rate | 5e-7 |
+| α (REINFORCE weight) | 0.5 |
+| γ (length-aware bonus) | > 0 |
+| MLP layers | 3 (ReLU) |
+| N Passes | 3 |
+| N Ahead (lookahead tokens) | 200 |
 
 **Evaluation:**
 
