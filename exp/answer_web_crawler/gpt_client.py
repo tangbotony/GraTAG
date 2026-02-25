@@ -14,7 +14,7 @@ def chat_with_gpt(query: str,
                   retry_time: int = 5,
                   json_mode: bool = False
                   ):
-    url = os.environ.get("OPENAI_API_BASE", "") + "/v1/chat/completions"
+    url = os.environ.get("OPENAI_API_BASE", "http://xxxxxxxxx:3001") + "/v1/chat/completions"
     if system_message:
         message = [
             {"role": "system", "content": system_message},

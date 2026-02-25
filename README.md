@@ -62,8 +62,8 @@ GraTAG is an end-to-end production-ready RAG system comprising seven key stages:
 │   ├── src/
 │   │   ├── include/
 │   │   ├── model_training/
-│   │   │   ├── GQD/                 # GQD-related training code
-│   │   │   └── TAG/                 # TAG-related training code
+│   │   │   ├── GQD/                 # GQD training (SFT + GRPO)
+│   │   │   └── TAG/                 # TAG training (triplet extraction + alignment)
 │   │   ├── modules/
 │   │   ├── pipeline/
 │   │   └── script/
@@ -73,12 +73,22 @@ GraTAG is an end-to-end production-ready RAG system comprising seven key stages:
 │   ├── route.json
 │   ├── run.py
 │   └── README.md
-├── backend/                         # Backend application code
-├── frontend/                        # Frontend application code
+├── backend/                         # Backend API service
+├── exp/
+│   ├── query/                       # Evaluation query sets
+│   │   ├── SearchBench_1000_en.txt  # SearchBench-1000 (English)
+│   │   ├── SearchBench_1000_en_cn.txt  # SearchBench-1000 (English + Chinese)
+│   │   └── browse_comp_test_set_decrypted.csv  # BrowseComp test set
+│   └── answer_web_crawler/          # Baseline answer collection via browser automation
+│       ├── crawlers/                # Per-product crawlers (Perplexity, Kimi, Ernie, etc.)
+│       ├── evaluate.py              # GPT-based answer extraction and judging
+│       ├── run_all.py               # Orchestration: crawl / evaluate / summary
+│       └── run_crawler.py           # Single-product crawler entry
+├── frontend/                        # Frontend web UI
 └── README.md                        # (this file)
 ```
 
-> `frontend/` stores the web UI; `backend/` stores backend code; `alg/` contains algorithm services and training. The full GraTAG pipeline integrates GQD, TAG, and multimodal presentation components.
+> `alg/` contains the core algorithm service and model training code. `backend/` provides the RESTful API layer. `frontend/` stores the web UI. `exp/` holds evaluation benchmarks and baseline collection scripts used in the paper experiments.
 
 ---
 
