@@ -1,6 +1,11 @@
 # GraTAG: Production AI Search via Graph-Based Query Decomposition and Triplet-Aligned Generation with Rich Multimodal Representations
 
 <p align="center">
+  <a href="https://creativecommons.org/licenses/by-nc/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg" alt="License: CC BY-NC 4.0"></a>
+  <img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="Python 3.9+">
+</p>
+
+<p align="center">
   <img src="material/teaser2_v1.png" alt="GraTAG Overview" width="100%">
 </p>
 
@@ -68,7 +73,6 @@ GraTAG is an end-to-end production-ready RAG system comprising seven key stages:
 │   │   ├── pipeline/
 │   │   └── script/
 │   ├── Dockerfile
-│   ├── LICENSE
 │   ├── requirements.txt
 │   ├── route.json
 │   ├── run.py
@@ -85,6 +89,7 @@ GraTAG is an end-to-end production-ready RAG system comprising seven key stages:
 │       ├── run_all.py               # Orchestration: crawl / evaluate / summary
 │       └── run_crawler.py           # Single-product crawler entry
 ├── frontend/                        # Frontend web UI
+├── LICENSE                          # CC BY-NC 4.0 license
 └── README.md                        # (this file)
 ```
 
@@ -940,3 +945,27 @@ data: {"type": "recommendation", "content": ["follow-up question 1", "..."]}
 | `Qa_pair` | `query`, `general_answer`, `images`, `timeline_id`, `reference`, `search_mode` | Individual question-answer pair with references |
 | `Timeline` | `data` (DictField) | Timeline visualization data |
 | `Subscription` | `query`, `push_interval`, `email`, `user_id` | Query subscription for periodic updates |
+
+---
+
+## License
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
+
+You are free to:
+
+* **Share** — copy and redistribute the material in any medium or format
+* **Adapt** — remix, transform, and build upon the material
+
+Under the following terms:
+
+* **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+* **NonCommercial** — You may not use the material for commercial purposes.
+
+For commercial licensing inquiries, please contact the authors.
+
+## Disclaimer
+
+This software is provided for **academic and research purposes only**. The authors make no warranties regarding the accuracy, completeness, or reliability of the software. Use of this software in any commercial product or service is strictly prohibited without prior written consent from the authors.
+
+The evaluation benchmarks (SearchBench-1000, BrowseComp) and baseline results included in this repository are intended solely for research reproducibility. Any use of crawled data must comply with the respective platforms' terms of service.
