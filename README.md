@@ -6,75 +6,53 @@
 </p>
 
 <p align="center">
-  <img src="material/teaser2_v1.png" alt="GraTAG Overview" width="100%">
+  <img src="assets/teaser2_v1.png" alt="GraTAG Overview" width="100%">
 </p>
 
-**GraTAG** is a comprehensive AI search engine framework that addresses key challenges in relevance, comprehensiveness, and presentation through three core innovations:
+**GraTAG** is an end-to-end production-ready AI search engine framework that addresses key challenges in relevance, comprehensiveness, and presentation through three core innovations:
 
-* **Graph-Based Query Decomposition (GQD)** — dynamically breaks down complex or ambiguous queries into structured sub-queries with explicit dependencies, enabling more precise, stepwise retrieval.
+* **Graph-Based Query Decomposition (GQD)** — decomposes complex queries into atomic sub-queries represented as a directed acyclic graph (DAG), capturing parallel and joint dependencies for finer-grained reasoning. The GQD model is post-trained via SFT followed by GRPO alignment with RAG task performance.
 
-<!-- <p align="center">
-  <img src="material/GQD_v1.png" alt="Graph-Based Query Decomposition" width="80%">
-</p> -->
+* **Triplet-Aligned Generation (TAG)** — extracts relation triplets from retrieved documents and aligns them with the answer generation process to bridge missing logic across chunks, enhancing coherence and mitigating hallucination. TAG employs a cold-start triplet extraction stage followed by REINFORCE-based triplet alignment.
 
-* **Triplet-Aligned Generation (TAG)** — dynamically constructs relation triplets from retrieved documents to explicitly model entity relationships, factual dependencies, and logical connections, enabling the model to generate more coherent and comprehensive answers.
+* **Rich Multimodal Presentations** — integrates timeline visualization and textual-visual choreography (image-text matching via Hungarian algorithm) to reduce cognitive load and enhance information verification.
 
-<!-- <p align="center">
-  <img src="material/TAG.png" alt="Triplet-Aligned Generation" width="80%">
-</p> -->
-
-* **Rich Multimodal Presentations** — integrates timeline visualization and textual-visual choreography to reduce cognitive load and enhance information verification.
-
-<!-- <p align="center">
-  <img src="material/Rich Answer Presentations.png" alt="Rich Multimodal Presentations" width="80%">
-</p> -->
-
-Evaluated on 1,000 recent real-world queries with over 243,000 expert ratings across 9 criteria, GraTAG **outperforms eight existing systems** in human expert assessments, excelling in relevance, comprehensiveness, and insightfulness. Compared to the strongest baseline, GraTAG improves comprehensiveness by **10.8%**, insightfulness by **7.9%**, and the overall average score by **4.8%**. On the public benchmark BrowseComp, GraTAG outperforms the best baseline by **17.3%**.
+Evaluated on 1,000 recent real-world queries with over 243,000 expert ratings across 9 criteria, GraTAG **outperforms eight existing systems** in human expert assessments. Compared to the strongest baseline, GraTAG improves comprehensiveness by **10.8%**, insightfulness by **7.9%**, and the overall average score by **4.8%**. On the public benchmark BrowseComp, GraTAG outperforms the best baseline by **17.3%**.
 
 <p align="center">
-  <img src="material/results_v1.png" alt="Multi-faceted comparison of different systems. Higher value indicates better performance, 10 is the maximum." width="100%">
+  <img src="assets/results_v1.png" alt="Multi-faceted comparison of different systems. Higher value indicates better performance, 10 is the maximum." width="100%">
 </p>
 
 ---
 
-## Pipeline Overview
+## Table of Contents
 
-GraTAG is an end-to-end production-ready RAG system comprising seven key stages:
-
-1. **Query Preprocessing** — uses a fine-tuned LLM to filter unsafe content, clarify ambiguous queries, and canonicalize spatiotemporal expressions.
-2. **Graph-Based Query Decomposition (GQD)** — decomposes complex queries into structured sub-queries with explicit dependencies to enable hierarchical reasoning.
-3. **Sub-query Expansion** — generates semantic variations to improve coverage.
-4. **Stepwise Retrieval** — performs multi-source retrieval guided by the GQD structure.
-5. **Deduplication and Reranking** — removes redundancy and suppresses noise from retrieved documents.
-6. **Triplet-Aligned Generation (TAG)** — dynamically constructs relation triplets from evidence chunks to restore logical coherence.
-7. **Rich Multimodal Presentations** — delivers structured outputs with timelines and citations to enhance user experience.
+- [Architecture Overview](#architecture-overview)
+- [Infrastructure Dependencies](#infrastructure-dependencies)
+- [Deployment Guide](#deployment-guide)
+- [Model Training](#model-training)
+- [Documentation](#documentation)
+- [License](#license)
+- [Disclaimer](#disclaimer)
 
 ---
 
-## Concepts at a Glance
-
-* **GQD** decomposes complex queries into atomic sub-queries represented as a directed acyclic graph (DAG) that explicitly encodes information flow among sub-queries. In contrast to linear or tree-based approaches, GQD captures parallel and joint dependencies, enabling finer-grained and more flexible reasoning. The GQD model is post-trained via supervised fine-tuning on curated query-GQD pairs, followed by reinforcement learning (GRPO) alignment with RAG task performance.
-* **TAG** extracts triplets from retrieved documents and aligns them with the answer generation process to explicitly bridge missing logic and relations across chunks. By injecting these structural cues, TAG enhances cross-chunk reasoning coherence and mitigates hallucination. TAG employs a cold-start triplet extraction stage followed by answer generation training with REINFORCE-based triplet alignment.
-* **Rich Multimodal Presentation** integrates timeline visualizations and textual-visual choreography to reduce cognitive load and enhance information verification. Timeline visualization extracts, deduplicates, groups, and sorts events from retrieved chunks; textual-visual choreography matches and places relevant images alongside generated paragraphs using a multi-measure similarity scoring and the Hungarian algorithm.
-
----
-
-## Code Documentation
-
-### Architecture Overview
+## Architecture Overview
 
 GraTAG adopts a three-tier architecture. The services communicate via HTTP: **Frontend → Backend API → Algorithm Service**.
 
-| Layer | Directory | Tech Stack | Description |
-|-------|-----------|------------|-------------|
-| **Frontend** | `frontend/` | Nuxt 3 + TypeScript + SCSS | Search interface with streaming answer display, timeline visualization, and document preview |
-| **Backend** | `backend/` | Flask + MongoEngine + JWT | RESTful API layer handling user management, QA session persistence, and algorithm service orchestration |
-| **Algorithm** | `alg/` | Flask + NetworkX + Transformers | Core AI pipeline implementing GQD, TAG, multi-source retrieval, and multimodal presentation |
-| **Experiments** | `experiments/` | Playwright + GPT-4o | Evaluation benchmarks (SearchBench-1000, BrowseComp) and baseline answer collection via browser automation |
+| Directory | Description |
+|-----------|-------------|
+| `alg/` | Algorithm service — core AI pipeline implementing GQD, TAG, multi-source retrieval, and multimodal presentation (Flask + NetworkX + Transformers) |
+| `backend/` | Backend service — RESTful API layer handling user management, QA session persistence, and algorithm service orchestration (Flask + MongoEngine + JWT) |
+| `frontend/` | Frontend application — search interface with streaming answer display, timeline visualization, and document preview (Nuxt 3 + TypeScript + SCSS) |
+| `experiments/` | Evaluation benchmarks (SearchBench-1000, BrowseComp) and baseline answer collection via browser automation (Playwright + GPT-4o) |
+| `docs/` | Technical documentation — module reference, API reference, and configuration guide |
+| `assets/` | Static resources — images and figures used in documentation |
 
 The algorithm service exposes two endpoints (`/execute` and `/stream_execute`) for synchronous and streaming invocations respectively. Key sub-directories under `alg/src/` include `pipeline/` (orchestration), `modules/` (GQD, TAG, retrieval, timeline), `model_training/` (GQD and TAG training scripts), and `include/` (shared config and context management).
 
-### Infrastructure Dependencies
+## Infrastructure Dependencies
 
 | Service | Purpose | Version |
 |---------|---------|---------|
@@ -87,9 +65,9 @@ The algorithm service exposes two endpoints (`/execute` and `/stream_execute`) f
 
 ---
 
-### Deployment Guide
+## Deployment Guide
 
-#### Prerequisites: Infrastructure Services
+### Prerequisites: Infrastructure Services
 
 Before deploying GraTAG, ensure the following infrastructure services are running and accessible:
 
@@ -104,7 +82,7 @@ Before deploying GraTAG, ensure the following infrastructure services are runnin
 
 ---
 
-#### Step 1: Deploy Algorithm Service
+### Step 1: Deploy Algorithm Service
 
 **1.1 Environment Setup**
 
@@ -206,7 +184,7 @@ curl -X POST http://localhost:10051/execute \
 
 ---
 
-#### Step 2: Deploy Backend Service
+### Step 2: Deploy Backend Service
 
 **2.1 Environment Setup**
 
@@ -356,7 +334,7 @@ curl http://localhost:5000/api/heartbeat
 
 ---
 
-#### Step 3: Deploy Frontend
+### Step 3: Deploy Frontend
 
 **3.1 Environment Setup**
 
@@ -456,227 +434,44 @@ server {
 
 ---
 
-### Core Module Reference
+### Startup Order
 
-#### Pipeline Entry — `alg/src/pipeline/functions.py`
+1. Infrastructure services (MongoDB, Elasticsearch, Milvus, LLM)
+2. Algorithm service (`alg/src/run.py`)
+3. Backend service (`backend/Backend/run.py`)
+4. Frontend (`frontend/`)
 
-The main pipeline orchestrates the full answer generation flow through two primary functions:
+### Environment Variables
 
-| Function | Description |
-|----------|-------------|
-| `supply_question(body, headers)` | Phase 1: Receives user query, performs intent understanding (rejection check, supplementary question generation, query translation), and initializes the QA context. |
-| `answer(body, headers)` | Phase 2: Executes the full RAG pipeline — query decomposition, retrieval, answer generation, and timeline construction — returning a streaming response. |
+| Variable | Service | Description |
+|----------|---------|-------------|
+| `NACOS_HOST_IP` | Backend | Host IP for Nacos service registration |
+| `VITE_API` | Frontend | Backend API gateway URL |
+| `VITE_ENV` | Frontend | Environment identifier (`sit` / `prod`) |
 
-**Execution Flow of `answer()`:**
+### Test-Time Latency
 
-```
-1. Load QA context from Elasticsearch
-2. [Parallel] Query decomposition (GQD) + Retrieval range detection
-3. Graph-based multi-source retrieval
-4. [Parallel] Answer generation (TAG, streaming) + Timeline generation
-5. Further question recommendation
-6. Stream results via Server-Sent Events
-```
+GraTAG maximizes parallelism (e.g., executing lateral sub-queries in GQD concurrently) and employs model fine-tuning and quantization to reduce latency.
 
-#### Query Preprocessing and Intent Understanding
-
-**Query Preprocessing:** A fine-tuned LLM (Qwen-2.5-14B) filters unsafe/harmful queries and clarifies ambiguous ones by prompting the user with options. A second LLM (Qwen-2.5-14B) rewrites the query by resolving relative spatiotemporal terms (e.g., "last week" → precise timestamp ranges), vague locations ("nearby" → specific places), and incomplete entity names.
-
-**Class: `IntentionUnderstandingTask`** — `modules/intention_understanding_group/`
-
-| Method | Output |
-|--------|--------|
-| `get_intention()` | Returns rejection decision, supplementary question suggestions, related events, and translated query |
-| `get_reject_judgement()` | Returns only the rejection decision for unsafe/inappropriate content |
-
-Output structure:
-
-```json
-{
-  "question_rejection": {"is_reject": false, "reject_reason": ""},
-  "question_supplement": {"is_supply": false, "supply_description": "", "supply_choices": []},
-  "related_event": ""
-}
-```
-
-#### Query Decomposition (GQD) — `modules/query_division_based_cot_group/`
-
-**Class: `QueryDivisionBasedCoTTask`**
-
-Decomposes complex queries into a directed acyclic graph (DAG) of sub-queries with explicit dependencies.
-
-| Method | Description |
+| System | Latency (s) |
 |--------|-------------|
-| `get_cot(use_scene="general")` | Entry point; dispatches to `query_rewrite_general()` or `query_rewrite_timeline()` based on scene |
-| `query_rewrite_general()` | Decomposes general queries via `MultiHopSplitQueries`, constructs DAG using `IGraph` |
-| `query_rewrite_timeline()` | Decomposes timeline-specific queries via `TimeLineSplitQueries` |
+| GraTAG | 14.2 |
+| Perplexity AI | 13.9 |
+| Tiangong AI | 4.0 |
+| Ernie Bot | 6.0 |
+| KIMI | 2.8 |
+| Metaso | 10.4 |
+| ChatGLM | 7.9 |
+| Baichuan | 6.1 |
+| Tongyi | 10.4 |
 
-**DAG Structure (`IGraph`):**
-
-```python
-class IGraph:
-    """Directed acyclic graph for structured query decomposition."""
-    add_new_node(node: ArcNode)          # Add sub-query node
-    insert_node_front(new_node, ori_val) # Insert dependency before node
-    add_arrow(query, former_val)         # Add dependency edge
-    get_turns()                          # BFS execution order respecting dependencies
-    get_attr(attr_name)                  # Filter nodes by attribute (need_rag, FunctionCall, etc.)
-```
-
-Each `ArcNode` contains: sub-query text, `need_rag` flag, `FunctionCall` indicator, retrieved answer, and dependency links.
-
-#### Multi-Source Retrieval — `modules/recall_group/`
-
-**Class: `RecallTask`**
-
-Performs graph-guided multi-source retrieval following the DAG execution order.
-
-| Method | Description |
-|--------|-------------|
-| `get_graph_recall(graph, application, retrieval_field, top_n_indices)` | Traverses the DAG, retrieves documents for each sub-query in parallel |
-| `_router(search_field, origin_query)` | Routes queries to appropriate data sources (news, hot news, general) |
-| `_get_recall_queries(graph, application)` | Extracts retrieval queries from DAG nodes |
-
-**Retrieval Sources:**
-- Online web search (via IAAR Database API) — multiple search engines queried simultaneously
-- Elasticsearch full-text search
-- Milvus vector similarity search
-
-**Chunking:** Uses `RecursiveCharacterTextSplitter` with chunk size **350** and overlap **25%**, following Azure AI Search findings.
-
-**Chunk Deduplication:** Computes pairwise cosine similarity using fine-tuned `bge-large` embeddings. Chunks with similarity > **0.8** are deduplicated via a greedy maximum independent set strategy.
-
-**Reranking:** Uses fine-tuned `bge-reranker-v2-m3` to sort chunks by relevance to each sub-query. Configuration from `CommonConfig`:
-
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `topk_es` | 1000 | Top-K candidates from Elasticsearch |
-| `topk_vec` | 500 | Top-K candidates from vector search |
-| `topk_rerank` | 150 | Final top-K after reranking |
-
-#### Answer Generation (TAG) — `modules/query_answer_group/`
-
-**Class: `QueryAnswerTask`**
-
-Generates coherent answers by aligning extracted relation triplets with evidence chunks.
-
-| Method | Description |
-|--------|-------------|
-| `get_query_answer(query, qa_series_id, ..., streaming=True)` | Streaming answer generation with inline citations and image placement |
-| `get_query_answer_without_streaming(...)` | Synchronous answer generation |
-
-**Textual-Visual Choreography:** Images from retrieved documents are filtered and placed alongside generated paragraphs:
-
-| Step | Method | Threshold / Model |
-|------|--------|-------------------|
-| Image quality filtering | Rule-based | Removes logos, icons, low-res images |
-| Image relevance filtering | bge-reranker-v2-m3 | similarity ≥ **0.3** |
-| Image-text similarity (1) | clip-vit-huge-patch14 | paragraph ↔ image embedding |
-| Image-text similarity (2) | bge-reranker-v2-m3 | paragraph ↔ document title |
-| Image-text similarity (3) | bge-large | paragraph ↔ document text |
-| Optimal alignment | Hungarian algorithm | weighted average of (1)(2)(3) |
-
-**Streaming Output Types:**
-
-| Type | Content |
-|------|---------|
-| `state` | Pipeline status updates |
-| `text` | Answer text chunk |
-| `image` | Image reference to insert |
-| `ref_answer` | Citation/reference information |
-| `text_end` | End-of-answer signal |
-| `recommendation` | Suggested follow-up questions |
-
-#### Timeline Generation — `modules/timeline_group/`
-
-**Class: `TimelineTask`**
-
-Generates structured timeline visualizations for temporal queries.
-
-**Pipeline Steps:**
-
-```
-Query Rewrite → Intent Understanding → CoT Query Splitting
-→ Multi-source Retrieval → Event Extraction → Deduplication
-→ Event Grouping → Highlight Extraction → Granularity Determination → Reference Extraction
-```
-
-**Key Parameters:**
-
-| Parameter | Value |
-|-----------|-------|
-| Event extraction LLM | Qwen2.5-14B-Instruct |
-| Event embedding model | bge-large |
-| Event deduplication threshold | cosine similarity > 0.9 |
-
-Runs in parallel with answer generation when `pro_flag=True`.
-
-#### Context Management — `include/context/RagQAContext.py`
-
-**Class: `RagQAContext`**
-
-Central context object shared across all pipeline modules within a single QA session.
-
-| Category | Key Methods |
-|----------|------------|
-| **Question** | `add_single_question(request_id, question_id, question, pro_flag)`, `get_single_question()` |
-| **DAG** | `set_dag(dag)`, `get_dag()` |
-| **References** | `add_references_result(references)`, `get_references_result_doc(need_new_content)` |
-| **Serialization** | `context_encode(obj)` → Base64 string, `context_decode(str)` → `RagQAContext` |
-
-Context is persisted in Elasticsearch between the `supply_question` and `answer` phases, enabling stateful multi-turn conversations.
+GraTAG latency is measured on a cluster of **16 Muxi MXC500 GPUs** (each ~70% computing power of NVIDIA A800). Baselines are measured via their publicly available interfaces.
 
 ---
 
-### Backend API Reference
+## Model Training
 
-The backend exposes RESTful endpoints under `/api/`. All endpoints (except login) require JWT authentication.
-
-#### QA Endpoints (`/api/qa/`)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/qa/series` | Create a new QA conversation series |
-| `POST` | `/api/qa/collection` | Create a QA collection within a series |
-| `POST` | `/api/qa/complete/ask` | Submit a query for intent analysis and supplementary question generation |
-| `POST` | `/api/qa/ask` | Submit a query for answer generation (SSE streaming response) |
-| `GET` | `/api/qa/history` | Retrieve QA conversation history |
-| `GET` | `/api/qa/series/<id>` | Get details of a specific QA series |
-| `DELETE` | `/api/qa/series/<id>` | Delete a QA series |
-| `GET` | `/api/qa/pair/<id>` | Get a specific QA pair |
-
-#### Search Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/qa/search/completion` | Query auto-completion and recommendation |
-| `GET` | `/api/qa/recommend` | Get recommended/trending questions |
-| `GET` | `/api/qa/search/history` | Get user search history |
-| `DELETE` | `/api/qa/search/history` | Clear search history |
-
-#### Document Search Endpoints (`/api/doc_search/`)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/doc_search/<doc_id>` | Preview a document |
-| `GET` | `/api/doc_search/doc_list/<series_id>` | List documents in a QA series |
-| `DELETE` | `/api/doc_search/doc` | Remove a document |
-| `PUT` | `/api/doc_search/update_select` | Update document selection state |
-
-#### Search Modes
-
-| Mode | Description |
-|------|-------------|
-| `pro` | Full pipeline with GQD + TAG + Timeline |
-| `lite` | Lightweight mode without timeline generation |
-| `doc` | Document-scoped QA (searches within uploaded documents) |
-| `doc_pro` | Document QA with full pipeline features |
-
----
-
-### Model Training
-
-#### GQD Training
+### GQD Training
 
 GQD adopts a two-stage training procedure: supervised fine-tuning (SFT) followed by Group Relative Policy Optimization (GRPO).
 
@@ -749,7 +544,7 @@ python GQD_Stage_2_GRPO.py \
 bash quick_start.sh
 ```
 
-#### TAG Training
+### TAG Training
 
 TAG employs a two-stage approach: (1) triplet extraction cold start via SFT, and (2) answer generation training with REINFORCE-based triplet alignment.
 
@@ -802,61 +597,15 @@ python pipeline_evaluation_new_exp.py
 
 ---
 
-### Configuration Reference
+## Documentation
 
-#### Algorithm Service — `alg/src/include/config/common_config.py`
+For detailed technical references, see the `docs/` directory:
 
-| Section | Key Parameters | Description |
-|---------|---------------|-------------|
-| `FSCHAT` | `vllm_url`, `hf_url` | LLM inference service endpoints |
-| `MODEL_CONFIG` | `qwen2_72b_vllm`, `memory25_72b` | Model-specific URLs and prompt templates |
-| `ES_QA` | `url`, `index`, `auth` | Elasticsearch connection for QA context |
-| `MILVUS` | `host`, `port`, `collection` | Milvus vector database connection |
-| `RERANK` | `topk_es`, `topk_vec`, `topk_rerank` | Retrieval and reranking thresholds |
-| `IAAR_DataBase` | `url`, `default_param` | External search API configuration |
-| `CHUNK_SPLIT` | `model_url` | Text chunking model endpoint |
-| `SIMILARITY_CONFIG` | `url` | Embedding similarity service |
-
-#### Backend Service — `backend/Backend/config/config.ini`
-
-| Section | Key Parameters | Description |
-|---------|---------------|-------------|
-| `DEFAULT` | `Host`, `Port`, `ALGORITHM_URL` | Service binding and algorithm service address |
-| `MONGO` | `Host`, `Port`, `DB`, `Username`, `Password` | MongoDB connection |
-| `ES` | `url`, `auth`, `passwd` | Elasticsearch connection |
-| `OSS` | `endpoint`, `access_key_id`, `bucket_name` | Object storage for documents/images |
-| `MINIO` | `url`, `access_key`, `secret_key` | MinIO alternative storage |
-| `PROMETHEUS` | `enable_flask`, `process_name` | Monitoring configuration |
-
----
-
-### Streaming Response Protocol
-
-The `/api/qa/ask` endpoint returns Server-Sent Events (SSE) with JSON payloads. Each event has a `type` field:
-
-```
-data: {"type": "state", "content": "searching"}
-data: {"type": "intention_query", "content": "rewritten query"}
-data: {"type": "ref_page", "content": [{"url": "...", "title": "...", "summary": "..."}]}
-data: {"type": "ref_answer", "content": {"references": [...]}}
-data: {"type": "text", "content": "answer chunk..."}
-data: {"type": "image", "content": {"url": "...", "position": 3}}
-data: {"type": "time_line", "content": {"events": [...]}}
-data: {"type": "text_end", "content": ""}
-data: {"type": "recommendation", "content": ["follow-up question 1", "..."]}
-```
-
----
-
-### Data Models (MongoDB)
-
-| Collection | Key Fields | Description |
-|------------|-----------|-------------|
-| `Qa_series` | `user_id`, `title`, `qa_pair_collection_list` | Top-level conversation thread |
-| `Qa_pair_collection` | `qa_series_id`, `query`, `qa_pair_list`, `is_subscribed` | Collection of Q&A pairs within a series |
-| `Qa_pair` | `query`, `general_answer`, `images`, `timeline_id`, `reference`, `search_mode` | Individual question-answer pair with references |
-| `Timeline` | `data` (DictField) | Timeline visualization data |
-| `Subscription` | `query`, `push_interval`, `email`, `user_id` | Query subscription for periodic updates |
+| Document | Description |
+|----------|-------------|
+| [Module Reference](docs/module_reference.md) | Core pipeline modules — GQD, TAG, retrieval, timeline, context management |
+| [API Reference](docs/api_reference.md) | Backend REST endpoints, streaming protocol, search modes, data models |
+| [Configuration](docs/configuration.md) | Algorithm service and backend configuration parameters |
 
 ---
 
