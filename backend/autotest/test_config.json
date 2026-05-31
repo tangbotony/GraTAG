@@ -1,0 +1,35 @@
+{
+    "test_login_credentials": {
+        "name": "gx324@nyu.edu",
+        "passwd": "xgy123"
+    },
+    "admin_credentials":{
+        "name":"admin@163.com",
+        "passwd":"shyjy_admin"
+    },
+    "AI_base": {
+        "selected_content": "生态环境是人类生存和发展的根基，保持良好生态环境是各国人民的共同心愿。",
+        "context_above": "",
+        "doc_id": "1",
+        "context_below": "",
+        "request_id": "test"
+    },
+    "basic": {
+        "selected_content": "生态环境是人类生存和发展的根基，保持良好生态环境是各国人民的共同心愿。",
+        "context_above": "ut sunt cillum",
+        "doc_id": "1",
+        "context_below": "pariatur amet in",
+        "request_id": "test"
+    },
+    "extended": {
+        "selected_content": "生态环境是人类生存和发展的根基，保持良好生态环境是各国人民的共同心愿。",
+        "context_above": "ut sunt cillum",
+        "doc_id": "1",
+        "context_below": "pariatur amet in",
+        "request_id": "test",
+        "output_num":5,
+        "output_length_rate":0.1
+    },
+    "online_url":"http://localhost:50000"
+}
+

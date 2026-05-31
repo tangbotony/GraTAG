@@ -1,0 +1,49 @@
+:root {
+    --base-title-font-size: 7px;
+    --base-h1-font-size: 6px;
+    --base-h2-font-size: 5px;
+    --base-h3-font-size: 4px;
+    --base-default-font-size: 3px;
+    --base-placeholder-font-size: 3px;
+    --base-title-line-height: 1.2;
+    --base-h1-line-height: 1.3;
+    --base-h2-line-height: 1.4;
+    --base-h3-line-height: 1.6;
+    --base-default-line-height: 1.8;
+    --base-placeholder-line-height: 1.8;
+  }
+  
+  :root {
+    --theme-color-editor-normal: #000000b8;
+    --theme-color-editor-title: #000000de;
+    --theme-border-editor-blockquote: #0000004f;
+  }
+  
+  :root {
+    --editor-default-margin-top: 15px;
+    --h1-margin-top: 15px;
+    --h2-margin-top: 5px;
+    --h3-margin-top: 5px;
+    --editor-placeholder-margin-top: 15px;
+  }
+  
+  :root {
+    --title-editor-line-height: calc(10 * .1 * var(--base-title-line-height));
+    --h1-line-height: calc(10 * .1 * var(--base-h1-line-height));
+    --h2-line-height: calc(10 * .1 * var(--base-h2-line-height));
+    --h3-line-height: calc(10 * .1 * var(--base-h3-line-height));
+    --editor-default-line-height: calc(10 * .1 * var(--base-default-line-height));
+    --eidtor-placeholder-line-height: calc(10 * .1 * var(--base-placeholder-line-height));
+  
+  }
+  
+  :root {
+    --h2-padding: 6.5px 0;
+    --h1-padding: 6.5px 0;
+    --h3-padding: 6.5px 0;
+  
+    --editor-default-font-size: 14px;
+    --h1-font-size: calc(5 * var(--base-h1-font-size));
+    --h2-font-size: calc(5 * var(--base-h2-font-size));
+    --h3-font-size: calc(5 * var(--base-h3-font-size));
+  }

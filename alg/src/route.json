@@ -1,0 +1,10 @@
+{
+    "pipeline.router_functions_v2.execute": {
+        "route": "/execute",
+        "methods": ["POST"]
+    },
+    "pipeline.router_functions_v2.stream_execute": {
+        "route": "/stream_execute",
+        "methods": ["POST"]
+    }
+}

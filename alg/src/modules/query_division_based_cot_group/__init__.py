@@ -1,0 +1,5 @@
+from modules.query_division_based_cot_group.query_division_based_cot_group import QueryDivisionBasedCoTTask
+from modules.query_division_based_cot_group.rewrite_query import TimeLocRewrite, TokenNumRewrite
+from modules.query_division_based_cot_group.query_division_doc_cot_group import QueryDivisionDocCoTTask, DocPreCOT
+from modules.query_division_based_cot_group.doc_query_classification import DocQueryClassifyTask
+

@@ -1,0 +1,42 @@
+{
+    "qwen110b_refuse": {
+        "valid_cnt": "1.0 (1000/1000)",
+        "true_of_reject": "0.926 (741/800)",
+        "false_of_reject": "0.074 (59/800)",
+        "true_of_not_reject": "0.96 (192/200)",
+        "false_of_not_reject": "0.04 (8/200)",
+        "right_query_type": "0.733 (543/741)"
+    },
+    "qwen14b_refuse": {
+        "valid_cnt": "1.0 (1000/1000)",
+        "true_of_reject": "0.42 (336/800)",
+        "false_of_reject": "0.58 (464/800)",
+        "true_of_not_reject": "1.0 (200/200)",
+        "false_of_not_reject": "0.0 (0/200)",
+        "right_query_type": "0.592 (199/336)"
+    },
+    "gpt-4-1106-preview_refuse": {
+        "valid_cnt": "1.0 (1000/1000)",
+        "true_of_reject": "0.886 (709/800)",
+        "false_of_reject": "0.114 (91/800)",
+        "true_of_not_reject": "0.955 (191/200)",
+        "false_of_not_reject": "0.045 (9/200)",
+        "right_query_type": "0.793 (562/709)"
+    },
+    "qwen2_72b_refuse": {
+        "valid_cnt": "0.997 (997/1000)",
+        "true_of_reject": "0.729 (581/797)",
+        "false_of_reject": "0.271 (216/797)",
+        "true_of_not_reject": "1.0 (200/200)",
+        "false_of_not_reject": "0.0 (0/200)",
+        "right_query_type": "0.768 (446/581)"
+    },
+    "qwen2_57b_14a_refuse": {
+        "valid_cnt": "1.0 (1000/1000)",
+        "true_of_reject": "0.675 (540/800)",
+        "false_of_reject": "0.325 (260/800)",
+        "true_of_not_reject": "1.0 (200/200)",
+        "false_of_not_reject": "0.0 (0/200)",
+        "right_query_type": "0.67 (362/540)"
+    }
+}

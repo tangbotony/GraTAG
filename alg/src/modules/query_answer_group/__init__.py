@@ -1,0 +1,2 @@
+from modules.query_answer_group.query_answer_group import QueryAnswerTask
+from modules.query_answer_group.doc_answer_group import DocAnswerTask

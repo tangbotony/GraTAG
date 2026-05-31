@@ -1,0 +1,1 @@
+from modules.query_recommend_group.query_recommend import QueryRecommendTask

@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'source-han-sans';
+  src: url('~/assets/fonts/SourceHanSansCN-VF.otf.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-stretch: 25% 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'source-han-serif';
+  src: url('~/assets/fonts/SourceHanSerifCN-VF.otf.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-stretch: 25% 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'fzfsjt';
+  src: url('~/assets/fonts/FangZhengFangSongJianTi-1.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'fzktjt';
+  src: url('~/assets/fonts/FangZhengKaiTiJianTi-1.ttf') format('truetype');
+  font-display: swap;
+}
